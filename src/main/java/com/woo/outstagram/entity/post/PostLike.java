@@ -1,5 +1,6 @@
 package com.woo.outstagram.entity.post;
 
+import com.woo.outstagram.entity.BaseTimeEntity;
 import com.woo.outstagram.entity.user.User;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class PostLike {
+public class PostLike extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

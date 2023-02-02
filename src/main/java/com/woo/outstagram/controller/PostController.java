@@ -38,5 +38,4 @@ public class PostController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

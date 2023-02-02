@@ -1,5 +1,6 @@
 package com.woo.outstagram.entity.user;
 
+import com.woo.outstagram.entity.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
