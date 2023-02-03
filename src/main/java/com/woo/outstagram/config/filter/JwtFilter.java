@@ -44,7 +44,8 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info("URL -> {}", request.getRequestURL());
 
         // 요청 Url의 시작이 PERMIT_URL_ARRAY에 포함되는지 검증하여, 해당되면 다음 필터로 요청을 전달한다.
-        String prePath = request.getServletPath().split("/")[1];
+        String prePath = (!request.getServletPath().equals("/") ? request.getServletPath().split("/")[1] : "/");
+
         if(Arrays.asList(PERMIT_URL_ARRAY).contains(prePath)) {
             filterChain.doFilter(request, response);
         } else {
@@ -75,6 +76,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.setCharacterEncoding("UTF-8");
             }
         }
+
     }
     public String getToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);

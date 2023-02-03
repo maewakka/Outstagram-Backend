@@ -1,5 +1,6 @@
 package com.woo.outstagram.dto.follow;
 
+import com.woo.outstagram.entity.user.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,5 +18,13 @@ public class UserDto {
         this.nickname = nickname;
         this.profileUrl = profileUrl;
         this.isFollow = isFollow;
+    }
+
+    public static UserDto toDto(User user) {
+        return UserDto.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .profileUrl(user.getProfileImgUrl())
+                .build();
     }
 }
