@@ -1,15 +1,14 @@
 package com.woo.outstagram.service;
 
 import com.woo.outstagram.dto.follow.UserDto;
-import com.woo.outstagram.dto.post.PostDto;
-import com.woo.outstagram.dto.post.PostFileDto;
-import com.woo.outstagram.dto.post.PostResponseDto;
-import com.woo.outstagram.dto.post.UploadPostRequestDto;
+import com.woo.outstagram.dto.post.*;
 import com.woo.outstagram.entity.post.Post;
 import com.woo.outstagram.entity.post.PostFile;
+import com.woo.outstagram.entity.post.PostLike;
 import com.woo.outstagram.entity.user.User;
 import com.woo.outstagram.repository.follow.FollowRepositorySupport;
 import com.woo.outstagram.repository.post.PostFileRepository;
+import com.woo.outstagram.repository.post.PostLikeRepository;
 import com.woo.outstagram.repository.post.PostRepository;
 import com.woo.outstagram.repository.post.PostRepositorySupport;
 import com.woo.outstagram.util.file.FileUploader;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,6 +33,7 @@ public class PostService {
     private final PostFileRepository postFileRepository;
     private final FileUploader fileUploader;
     private final FollowRepositorySupport followRepositorySupport;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional
     public void uploadPost(User user, UploadPostRequestDto requestDto) {
@@ -98,11 +99,39 @@ public class PostService {
                             .postId(post.getId())
                             .content(post.getContent())
                             .user(UserDto.toDto(post.getUser()))
+                            .like(postLikeRepository.existsByPostAndUser(post, follower))
                             .build()
             );
         });
 
         return PostResponseDto.builder().postList(postDtoList).build();
+    }
+
+
+    @Transactional
+    public PostResponseDto setPostLike(User user, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("해당 게시글이 없습니다."));
+
+        // postLike 저장 DB에 요청 좋아요 정보가 없다면, 저장한다.
+        if(!postLikeRepository.existsByPostAndUser(post, user)) {
+            postLikeRepository.save(PostLike.builder()
+                    .post(post)
+                    .user(user)
+                    .build());
+        }
+
+        return this.getPostList(user);
+    }
+
+    @Transactional
+    public PostResponseDto deletePostLike(User user, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("해당 게시글이 없습니다."));
+
+        PostLike postLike = postLikeRepository.findByPostAndUser(post, user).orElseThrow(() -> new EntityNotFoundException());
+
+        postLikeRepository.delete(postLike);
+
+        return this.getPostList(user);
     }
 
 }

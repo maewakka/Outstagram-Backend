@@ -45,5 +45,22 @@ public class PostController {
         }
     }
 
+    @GetMapping("/like")
+    public ResponseEntity setPostLike(@CurrentUser User user, @RequestParam(value = "postId") Long postId) {
+        try {
+            return ResponseEntity.ok().body(postService.setPostLike(user, postId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/like")
+    public ResponseEntity deletePostLike(@CurrentUser User user, @RequestParam(value = "postId") Long postId) {
+        try {
+            return ResponseEntity.ok().body(postService.deletePostLike(user, postId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }
