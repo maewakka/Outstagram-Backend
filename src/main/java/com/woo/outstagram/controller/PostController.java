@@ -1,5 +1,7 @@
 package com.woo.outstagram.controller;
 
+import com.woo.outstagram.dto.post.PostChatRequestDto;
+import com.woo.outstagram.dto.post.PostChatResponseDto;
 import com.woo.outstagram.dto.post.UploadPostRequestDto;
 import com.woo.outstagram.entity.user.CurrentUser;
 import com.woo.outstagram.entity.user.User;
@@ -45,6 +47,24 @@ public class PostController {
         }
     }
 
+    @GetMapping("/post-my-list")
+    public ResponseEntity getMyPostList(@CurrentUser User user) {
+        try {
+            return ResponseEntity.ok().body(postService.getMyPostList(user));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/post")
+    public ResponseEntity deletePost(@CurrentUser User user, @RequestParam(value = "postId") Long postId) {
+        try {
+            return ResponseEntity.ok().body(postService.deletePost(user, postId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/like")
     public ResponseEntity setPostLike(@CurrentUser User user, @RequestParam(value = "postId") Long postId) {
         try {
@@ -63,4 +83,30 @@ public class PostController {
         }
     }
 
+    @GetMapping("/posts/chat")
+    public ResponseEntity getPostChatList(@RequestParam(value = "postId") Long postId) {
+        try {
+            return ResponseEntity.ok().body(postService.getPostChatList(postId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/posts/chat")
+    public ResponseEntity setPostChat(@CurrentUser User user, @RequestBody PostChatRequestDto requestDto) {
+        try {
+            return ResponseEntity.ok().body(postService.setPostChat(user, requestDto));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/posts/chat")
+    public ResponseEntity deletePostChat(@RequestParam(value = "postId") Long postId, @RequestParam(value = "chatId") Long chatId) {
+        try {
+            return ResponseEntity.ok().body(postService.deletePostChat(postId, chatId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

@@ -37,4 +37,17 @@ public class FileUploader {
             log.debug("{}", e.getMessage());
         }
     }
+
+    public void saveFile(String email, String type, MultipartFile file) {
+
+        Path copyOfLocation = Paths.get(repositoryPath + File.separator +  type + File.separator + email + File.separator + StringUtils.cleanPath(file.getOriginalFilename()));
+        Path copyOfDirectory = Paths.get(repositoryPath + File.separator + type + File.separator + email);
+        try {
+            Files.createDirectories(copyOfDirectory);
+            Files.copy(file.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
+            log.info("File {} is saved at Directory [{}]", file.getOriginalFilename(), copyOfLocation);
+        } catch (IOException e) {
+            log.debug("{}", e.getMessage());
+        }
+    }
 }
