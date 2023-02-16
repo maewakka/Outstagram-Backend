@@ -72,5 +72,4 @@ public class ProfileController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

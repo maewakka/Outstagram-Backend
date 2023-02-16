@@ -20,7 +20,10 @@ public class PostRepositorySupport extends QuerydslRepositorySupport {
     }
 
     public List<Post> getPosts(List<User> userList) {
-
         return queryFactory.selectFrom(post).where(post.user.in(userList)).orderBy(post.modifiedDate.desc()).fetch();
+    }
+
+    public List<Post> getPosts(String query) {
+        return queryFactory.selectFrom(post).where(post.content.contains(query)).orderBy(post.modifiedDate.desc()).fetch();
     }
 }

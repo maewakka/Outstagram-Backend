@@ -100,6 +100,8 @@ public class PostService {
                             .content(post.getContent())
                             .user(UserDto.toDto(post.getUser()))
                             .like(postLikeRepository.existsByPostAndUser(post, follower))
+                            .countLike(postLikeRepository.countByPost(post))
+                            .countChat(postChatRepository.countByPost(post))
                             .build()
             );
         });
@@ -218,4 +220,33 @@ public class PostService {
         return this.getPostChatList(postId);
     }
 
+    @Transactional
+    public PostResponseDto getSearchPostList(User user, String query) {
+        List<Post> postList = postRepositorySupport.getPosts(query);
+        List<PostDto> postDtoList = new ArrayList<>();
+
+        postList.forEach((post -> {
+            List<PostFile> postFileList = postFileRepository.findAllByPost(post);
+            List<PostFileDto> postFileDtoList = new ArrayList<>();
+
+            // PostFileDto로 변환
+            postFileList.forEach((postFile) -> {
+                postFileDtoList.add(PostFileDto.toDto(postFile));
+            });
+
+            // PostDtoList에 내용 삽입
+            postDtoList.add(
+                    PostDto.builder()
+                            .postFileList(postFileDtoList)
+                            .postId(post.getId())
+                            .content(post.getContent())
+                            .user(UserDto.toDto(post.getUser()))
+                            .like(postLikeRepository.existsByPostAndUser(post, user))
+                            .countLike(postLikeRepository.countByPost(post))
+                            .countChat(postChatRepository.countByPost(post))
+                            .build());
+        }));
+
+        return PostResponseDto.builder().postList(postDtoList).build();
+    }
 }

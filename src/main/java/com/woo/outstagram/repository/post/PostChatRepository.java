@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostChatRepository extends JpaRepository<PostChat, Long> {
-
     List<PostChat> findAllByPostOrderByCreatedDateDesc(Post post);
+    Long countByPost(Post post);
 }

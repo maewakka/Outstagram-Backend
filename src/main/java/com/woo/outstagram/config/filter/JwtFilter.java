@@ -33,16 +33,13 @@ public class JwtFilter extends OncePerRequestFilter {
             "webjars",
             "v3",
             "users",
-            "static"
+            "static",
+            "socket"
     };
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        log.info("METHOD -> {}", request.getMethod());
-        log.info("URL -> {}", request.getRequestURL());
-
         // 요청 Url의 시작이 PERMIT_URL_ARRAY에 포함되는지 검증하여, 해당되면 다음 필터로 요청을 전달한다.
         String prePath = (!request.getServletPath().equals("/") ? request.getServletPath().split("/")[1] : "/");
 

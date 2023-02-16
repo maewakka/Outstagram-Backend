@@ -109,4 +109,13 @@ public class PostController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/posts/search")
+    public ResponseEntity getSearchPostList(@CurrentUser User user, @RequestParam(value = "query") String query) {
+        try {
+            return ResponseEntity.ok().body(postService.getSearchPostList(user, query));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

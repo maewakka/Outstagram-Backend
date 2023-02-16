@@ -19,11 +19,14 @@ public class ChatRoom extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "made_user")
+    @JoinColumn(name = "create_user_id")
     private User user;
 
+    private String lastMessage;
+
     @Builder
-    public ChatRoom(User user) {
+    public ChatRoom(User user, String lastMessage) {
         this.user = user;
+        this.lastMessage = lastMessage;
     }
 }

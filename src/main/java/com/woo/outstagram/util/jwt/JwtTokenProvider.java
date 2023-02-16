@@ -54,4 +54,10 @@ public class JwtTokenProvider {
             return -1;
         }
     }
+
+    public String getEmail(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+
+        return claims.get("email").toString();
+    }
 }
