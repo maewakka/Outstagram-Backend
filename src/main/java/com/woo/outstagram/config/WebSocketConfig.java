@@ -33,5 +33,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureClientInboundChannel(ChannelRegistration registry) {
         registry.interceptors(stompHandler);
     }
-
 }

@@ -60,5 +60,4 @@ public class ChatController {
             return ResponseEntity.badRequest().body("요청에 오류가 발생하였습니다.");
         }
     }
-
 }
