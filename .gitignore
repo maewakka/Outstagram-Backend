@@ -41,4 +41,4 @@ out/
 .DS_Store
 test/
 
-/outstagram/node_modules
+/outstagram-front/node_modules
