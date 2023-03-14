@@ -35,6 +35,10 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final PostChatRepository postChatRepository;
 
+    /**
+     * 게시글에 대한 내용(글, 유저, 이미지, 동영상 등)을 저장한다.
+     * @param user, UploadPostRequestDto
+     */
     @Transactional
     public void uploadPost(User user, UploadPostRequestDto requestDto) {
 
@@ -66,6 +70,10 @@ public class PostService {
                 });
     }
 
+    /**
+     * 나와 내가 Follow한 유저들의 게시물들을 반환해준다.
+     * @param follower
+     */
     @Transactional
     public PostResponseDto getPostList(User follower) {
 
@@ -109,6 +117,10 @@ public class PostService {
         return PostResponseDto.builder().postList(postDtoList).build();
     }
 
+    /**
+     * 내가 작성한 게시글의 List를 반환해준다.
+     * @param user
+     */
     @Transactional
     public PostResponseDto getMyPostList(User user) {
         List<Post> postList = postRepository.findAllByUserOrderByModifiedDateDesc(user);
@@ -138,6 +150,10 @@ public class PostService {
         return PostResponseDto.builder().postList(postDtoList).build();
     }
 
+    /**
+     * 게시글을 삭제하는 로직
+     * @param user, postId
+     */
     @Transactional
     public PostResponseDto deletePost(User user, Long postId) {
         Post savedPost = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
@@ -158,6 +174,10 @@ public class PostService {
     }
 
 
+    /**
+     * 해당 게시글의 좋아요 눌렀을 때 로직
+     * @param user, postId
+     */
     @Transactional
     public PostResponseDto setPostLike(User user, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
@@ -173,6 +193,10 @@ public class PostService {
         return this.getPostList(user);
     }
 
+    /**
+     * 해당 게시글 좋아요를 취소했을 때 로직
+     * @param user, postId
+     */
     @Transactional
     public PostResponseDto deletePostLike(User user, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
@@ -184,6 +208,10 @@ public class PostService {
         return this.getPostList(user);
     }
 
+    /**
+     * 해당 게시글의 댓글들을 모두 반환해주는 로직
+     * @param postId
+     */
     @Transactional
     public PostChatResponseDto getPostChatList(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
@@ -198,6 +226,10 @@ public class PostService {
         return PostChatResponseDto.builder().postChatList(postChatDtoList).build();
     }
 
+    /**
+     * 게시글에 댓글을 게시했을 때 저장해주는 로직
+     * @param user, PostChatRequestDto
+     */
     @Transactional
     public PostChatResponseDto setPostChat(User user, PostChatRequestDto requestDto) {
         Post post = postRepository.findById(requestDto.getPostId()).orElseThrow(() -> new EntityNotFoundException("해당 게시글을 찾을 수 없습니다."));
@@ -211,6 +243,10 @@ public class PostService {
         return this.getPostChatList(requestDto.getPostId());
     }
 
+    /**
+     * 해당 댓글을 삭제하는 로직
+     * @param postId, postChatId
+     */
     @Transactional
     public PostChatResponseDto deletePostChat(Long postId, Long postChatId) {
         PostChat postChat = postChatRepository.findById(postChatId).orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
@@ -220,6 +256,10 @@ public class PostService {
         return this.getPostChatList(postId);
     }
 
+    /**
+     * 게시글의 내요에서 Query 문에 포함된 게시글만 반환해주는 로직
+     * @param user, query
+     */
     @Transactional
     public PostResponseDto getSearchPostList(User user, String query) {
         List<Post> postList = postRepositorySupport.getPosts(query);

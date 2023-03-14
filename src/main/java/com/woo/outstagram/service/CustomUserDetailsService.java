@@ -17,6 +17,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    /**
+     * 인증 후 Custom한 Authentication 객체인 CustomUserDetails를 반환한다.
+     * @param email
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));

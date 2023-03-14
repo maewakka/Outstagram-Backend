@@ -27,6 +27,10 @@ public class ProfileService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * 사용자 세부사항을 반환해주는 로직
+     * @param user
+     */
     @Transactional
     public UserDetailResponseDto getProfile(User user) {
         return UserDetailResponseDto.builder()
@@ -39,6 +43,10 @@ public class ProfileService {
                 .build();
     }
 
+    /**
+     * 프로필 목록에 포함되는 여러 Count 수(게시글 수, 팔로워, 팔로잉 수)를 반환해주는 로직
+     * @param user
+     */
     @Transactional
     public ProfileCountResponseDto getProfileCount(User user) {
 
@@ -49,6 +57,10 @@ public class ProfileService {
                 .build();
     }
 
+    /**
+     * 프로필 섬네일 사진을 변경해주는 로직
+     * @param user, file
+     */
     @Transactional
     public UserDetailResponseDto updateProfileThumbnail(User user, MultipartFile file) {
 
@@ -61,6 +73,10 @@ public class ProfileService {
         return this.getProfile(user);
     }
 
+    /**
+     * 유저 세부사항을 업데이트 해주는 로직
+     * @param user, ProfileUpdateRequestDto
+     */
     @Transactional
     public UserDetailResponseDto updateProfiles(User user, ProfileUpdateRequestDto requestDto) {
 
@@ -74,6 +90,10 @@ public class ProfileService {
         return this.getProfile(user);
     }
 
+    /**
+     * 유저 비밀번호 변경 로직
+     * @param user, UpdatePasswordRequestDto
+     */
     @Transactional
     public void updateUserPassword(User user, UpdatePasswordRequestDto requestDto) throws Exception {
         if(passwordEncoder.matches(requestDto.getPrevPw(), user.getPassword())) {

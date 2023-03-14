@@ -23,6 +23,11 @@ public class FollowService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
+    /**
+     * Follow할 유저들의 리스트와 Follow상태를 리턴해준다.
+     * @param user
+     * @return User List
+     */
     @Transactional
     public UserListResponseDto getUserList(User user) {
         // DB에서 조회한 모든 유저 리스트
@@ -46,6 +51,9 @@ public class FollowService {
         return UserListResponseDto.builder().userList(userDtoList).build();
     }
 
+    /**
+     * Follow 기능
+     */
     @Transactional
     public UserListResponseDto saveFollow(User user, String email) {
         // 팔로잉하는 유저 검색
@@ -60,6 +68,9 @@ public class FollowService {
         return this.getUserList(user);
     }
 
+    /**
+     * UnFollow 기능
+     */
     @Transactional
     public UserListResponseDto deleteFollow(User user, String email) throws Exception {
         // 팔로잉하는 유저와 팔로잉 정보 검색

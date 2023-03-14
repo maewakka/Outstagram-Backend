@@ -25,6 +25,10 @@ public class JwtTokenProvider {
     private final CustomUserDetailsService customUserDetailsService;
 
 
+    /**
+     * Claim의 사용자 Email을 포함시켜 JWT 토큰을 생성해준다.
+     * @param email
+     */
     public String createJwt(String email) {
         Claims claims = Jwts.claims();
         claims.put("email", email);
@@ -37,6 +41,10 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    /**
+     * 토큰에서 사용자 정보를 빼 Authentication 인증 객체를 반환한다.
+     * @param token
+     */
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
         String email = claims.get("email").toString();
@@ -46,6 +54,10 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
     }
 
+    /**
+     * 토큰이 유효한지 검증한다. 1이면 유효, -1이면 유효하지 않는다.
+     * @param token
+     */
     public int validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
@@ -53,11 +65,5 @@ public class JwtTokenProvider {
         } catch (Exception e) {
             return -1;
         }
-    }
-
-    public String getEmail(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
-
-        return claims.get("email").toString();
     }
 }

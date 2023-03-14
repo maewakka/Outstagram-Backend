@@ -33,6 +33,11 @@ public class ChatService {
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final SimpMessagingTemplate simpMessageTemplate;
 
+    /**
+     * 요청 유저를 제외한 다른 유저들의 목록을 반환해준다.
+     * @param user
+     * @return ChatUserDto List
+     */
     @Transactional
     public ChatUserListResponseDto getChatUserList(User user) {
         List<User> userList = userRepository.findAll();
@@ -69,6 +74,10 @@ public class ChatService {
         return ChatUserListResponseDto.builder().chatRoomList(chatUserDtoList).build();
     }
 
+    /**
+     * 채팅할 User와 채팅방이 없다면 생성하고, 그 정보를 저장한다.
+     * @param user, target
+     */
     @Transactional
     public ChatUserListResponseDto createChatRoom(User user, String target) throws Exception {
         User targetUser = userRepository.findByEmail(target).orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
@@ -85,6 +94,10 @@ public class ChatService {
         return this.getChatUserList(user);
     }
 
+    /**
+     * 채팅방 목록을 반환한다.
+     * @param chatRoomId
+     */
     @Transactional
     public ChatResponseDto getChatList(Long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new EntityNotFoundException());
@@ -99,6 +112,10 @@ public class ChatService {
         return ChatResponseDto.builder().chatList(chatDtoList).build();
     }
 
+    /**
+     * 해당 채팅방에 유저가 전송한 메세지를 저장한다.
+     * @param user, ChatRequestDto
+     */
     @Transactional
     public ChatResponseDto saveChat(User user, ChatRequestDto requestDto) {
         ChatRoom chatRoom = chatRoomRepository.findById(requestDto.getChatRoomId()).orElseThrow(() -> new EntityNotFoundException());
@@ -113,6 +130,10 @@ public class ChatService {
         return this.getChatList(requestDto.getChatRoomId());
     }
 
+    /**
+     * 같은 채팅방 번호를 구독한 유저들에게 simpMesageTemplate 형태로 메세지를 전송한다.
+     * @param requestDto
+     */
     @Transactional
     public void sendMessage(ChatRequestDto requestDto) {
         log.info(requestDto.toString());

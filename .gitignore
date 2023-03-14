@@ -40,3 +40,5 @@ out/
 **/resources/application.yml
 .DS_Store
 test/
+
+/outstagram/node_modules

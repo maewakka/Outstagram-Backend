@@ -21,6 +21,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+    /**
+     * 회원가입 로직
+     * @param requestDto
+     */
     @Transactional
     public void join(SignUpRequestDto requestDto) throws Exception {
         if(!userRepository.existsByEmail(requestDto.getEmail())) {
@@ -30,6 +34,10 @@ public class UserService {
         }
     }
 
+    /**
+     * 로그인 로직
+     * @param LoginRequestDto
+     */
     @Transactional
     public String login(LoginRequestDto requestDto) throws Exception {
         String email = requestDto.getEmail();

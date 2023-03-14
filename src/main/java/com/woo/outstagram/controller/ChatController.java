@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * 채팅 기능 관련 컨트롤러
+ */
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    // 채팅방 생성
     @GetMapping("/chats/create")
     public ResponseEntity<? extends Object> createChatRoom(@CurrentUser User user, @RequestParam(value = "target") String target) throws Exception {
         try {
@@ -29,6 +33,7 @@ public class ChatController {
         }
     }
 
+    // 채팅 유저 목록
     @GetMapping("/chats/user-list")
     public ResponseEntity getChatUserList(@CurrentUser User user) {
         try {
@@ -38,11 +43,13 @@ public class ChatController {
         }
     }
 
+    // 채팅방 메세지 송수신
     @MessageMapping("/messages")
     public void chat(ChatRequestDto requestDto) {
         chatService.sendMessage(requestDto);
     }
 
+    // 채팅방 목록
     @GetMapping("/chats/chat-list")
     public ResponseEntity getChatList(@RequestParam(value = "chatRoomId", required = false) Long chatRoomId) {
         try {
@@ -52,6 +59,7 @@ public class ChatController {
         }
     }
 
+    // 채팅 메세지 내역 저장
     @PostMapping("/chats/chat")
     public ResponseEntity saveChat(@CurrentUser User user, @RequestBody ChatRequestDto requestDto) {
         try {
